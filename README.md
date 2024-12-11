@@ -66,6 +66,6 @@ Email: marticasals@gmail.com
 
 **Daniel Fernández**   
 Department of Statistics and Operations Research (DEIO). Universitat Politècnica de Catalunya · BarcelonaTech (UPC), Barcelona, Spain.
-[ORCID: 0000-0003-0012-2094] (https://orcid.org/0000-0003-0012-2094)
+[ORCID: [0000-0003-0012-2094](https://orcid.org/0000-0003-0012-2094)] (https://orcid.org/0000-0003-0012-2094)
 e-mail: daniel.fernandez.martinez@upc.edu
 
