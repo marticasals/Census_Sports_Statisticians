@@ -64,3 +64,8 @@ National Institute of Physical Education of Catalonia (INEFC), University of Bar
 [ORCiD: https://orcid.org/0000-0002-1775-8331](https://orcid.org/0000-0002-1775-8331)  
 Email: marticasals@gmail.com
 
+Daniel Fernández 
+Department of Statistics and Operations Research (DEIO). Universitat Politècnica de Catalunya · BarcelonaTech (UPC), Barcelona, Spain.
+ORCID: 0000-0003-0012-2094
+e-mail: daniel.fernandez.martinez@upc.edu
+
