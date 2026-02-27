@@ -1,0 +1,330 @@
+---
+title: "EDA"
+author: ""
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: pdf_document
+---
+
+We load the necessary packages to execute all the queries.
+
+```{r}
+library(questionr)
+library(dplyr)
+library(factoextra)
+library(readxl)
+#library(summarytools)
+library(compareGroups)
+citation("compareGroups")
+library("FactoMineR")
+citation("FactoMineR")
+library("factoextra")
+citation("factoextra")
+library(DataExplorer)
+```
+
+#DATABASE FOR ANALYSIS
+
+We load the database.
+
+```{r}
+bd <- read_excel("/Volumes/PENMARTI/ARTICLES/ARTICLE CENS/DB_ANALYSIS.xlsx")
+head(bd)
+```
+
+We rename the variables to make them easier to identify.
+
+```{r}
+noms <- c("Gender","Age group","Country categorized","Type","Highest level of education","Years worked in sports statistics in academia","Profile","Currently belong to a sports statistics research group?","Total citations in GS","Total citations in GS since 2021","Total citations in GS acording H-index","Total citations in GS acording H-index since 2021","Number of citations of the article with most citations","Number of sports studied")
+colnames(bd) <- noms
+attach(bd)
+```
+
+We convert the categorical variables to factors so that they can be handled more easily.
+
+```{r}
+# First, we transform the database into a data frame
+bd <- data.frame(bd)
+# Then, we identify the categorical variables and collect them all into a vector.
+x <- c()
+for(i in 1:ncol(bd)){
+  if(is.character(bd[,i])){
+    x <- c(x,i)
+  }
+}
+# Finally, we declare them as factors.
+for(i in x) {
+  bd[,i]<-as.factor(bd[,i])
+}
+# Finally, we check that they have been transformed into a vector.
+str(bd)
+```
+
+**Univariate Analysis**
+
+Let's look at the frequencies and key statistical measures.
+
+*Variable Gender*
+
+```{r}
+freq(bd$Gender, cum = F, digits = 2)
+```
+
+*Variable Age group*
+
+```{r}
+freq(bd$`Age.group`, cum = F, digits = 2)
+```
+
+*Variable Country categorized* 
+
+```{r}
+freq(bd$`Country.categorized`, cum = F, digits = 2)
+```
+
+*Variable Type*
+
+```{r}
+freq(bd$Type, cum = F, digits = 2)
+```
+
+*Variable Highest level of education*
+
+```{r}
+freq(bd$`Highest.level.of.education`, cum = F, digits = 2)
+```
+
+*Variable years worked in sports statistics in academia*
+
+```{r}
+freq(bd$`Years.worked.in.sports.statistics.in.academia`, cum = F, digits = 2)
+```
+
+*Variable Profile*
+
+```{r}
+freq(bd$Profile, cum = F, digits = 2)
+```
+
+*Variable Currently belong to a sports statistic research group?*
+
+```{r}
+freq(bd$`Currently.belong.to.a.sports.statistics.research.group.`, cum = F, digits = 2)
+```
+
+*Variable Total citations in GS*
+
+```{r}
+summary(bd$Total.citations.in.GS)
+sd(bd$Total.citations.in.GS)
+```
+
+*Variable Total citations in GS since 2021*
+
+```{r}
+summary(bd$Total.citations.in.GS.since.2021)
+sd(bd$Total.citations.in.GS.since.2021)
+```
+
+*Variable Total citations in GS acording H-index*
+
+```{r}
+summary(bd$Total.citations.in.GS.acording.H.index)
+sd(bd$Total.citations.in.GS.acording.H.index)
+```
+
+*Variable Total citations in GS acording H-index since 2021*
+
+```{r}
+summary(bd$Total.citations.in.GS.acording.H.index.since.2021)
+sd(bd$Total.citations.in.GS.acording.H.index.since.2021)
+```
+
+*Variable Number of citations of the article with most citations*
+
+```{r}
+summary(bd$Number.of.citations.of.the.article.with.most.citations)
+sd(bd$Number.of.citations.of.the.article.with.most.citations)
+```
+
+*Variable Number of sports studied*
+
+```{r}
+summary(bd$Number.of.sports.studied)
+sd(bd$Number.of.sports.studied)
+```
+
+**Bivariate Analysis**
+
+We perform a Shapiro-Wilk test to check if the numerical variables follow a normal distribution.
+
+```{r}
+shapiro.test(bd$Total.citations.in.GS)
+shapiro.test(bd$Total.citations.in.GS.since.2021)
+shapiro.test(bd$Total.citations.in.GS.acording.H.index)
+shapiro.test(bd$Total.citations.in.GS.acording.H.index.since.2021)
+shapiro.test(bd$Number.of.citations.of.the.article.with.most.citations)
+shapiro.test(bd$Number.of.sports.studied)
+```
+
+Comparison between the response variable and all other variables.
+
+*Variable Gender*
+
+```{r}
+# Do not consider Country, Type, and Research group.
+compareGroups(Gender~., data = bd, method = 2, chisq.test.perm = F)
+```
+
+```{r}
+# Only consider Country, Type, and Research group.
+compareGroups(Gender~., data = bd, method = 2, chisq.test.perm = T)
+```
+
+*Variable Age group*
+
+```{r}
+# Do not consider Country, Type, and Research group.
+compareGroups(Age.group~., data = bd, method = 2, chisq.test.perm = F)
+```
+
+```{r}
+# Only consider Country, Type, and Research group.
+compareGroups(Age.group~., data = bd, method = 2, chisq.test.perm = T)
+```
+
+*Variable Country categorized*
+
+```{r}
+# Do not consider Country, Type, and Research group.
+compareGroups(Country.categorized~., data = bd, method = 2, chisq.test.perm = F)
+```
+
+*Variable Type*
+
+```{r}
+# Do not consider Country, Type, and Research group.
+compareGroups(Type~., data = bd, method = 2, chisq.test.perm = F)
+```
+
+```{r}
+# Only consider Country, Type, and Research group.
+compareGroups(Type~., data = bd, method = 2, chisq.test.perm = T)
+```
+
+*Variable Highest level of education*
+
+```{r}
+# Do not consider Country, Type, and Research group.
+compareGroups(Highest.level.of.education~., data = bd, method = 2, chisq.test.perm = F)
+```
+
+```{r}
+# Only consider Country, Type, and Research group.
+compareGroups(Highest.level.of.education~., data = bd, method = 2, chisq.test.perm = T)
+```
+
+*Variable Years worked in sports statistics in academia*
+
+```{r}
+# Do not consider Country, Type, and Research group.
+compareGroups(Years.worked.in.sports.statistics.in.academia~., data = bd, method = 2, chisq.test.perm = F)
+```
+
+```{r}
+# Only consider Country, Type, and Research group.
+compareGroups(Years.worked.in.sports.statistics.in.academia~., data = bd, method = 2, chisq.test.perm = T)
+```
+
+*Variable Years worked in sports statistics in academia*
+
+```{r}
+# Do not consider Country, Type, and Research group.
+compareGroups(Profile~., data = bd, method = 2, chisq.test.perm = F)
+```
+
+```{r}
+# Only consider Country, Type, and Research group.
+compareGroups(Profile~., data = bd, method = 2, chisq.test.perm = T)
+```
+
+*Variable Currently belong to a sports statistics research group?*
+
+```{r}
+# Do not consider Country, Type, and Research group.
+compareGroups(Currently.belong.to.a.sports.statistics.research.group.~., data = bd, method = 2, chisq.test.perm = F)
+```
+
+```{r}
+# Only consider Country, Type, and Research group.
+compareGroups(Currently.belong.to.a.sports.statistics.research.group.~., data = bd, method = 2, chisq.test.perm = T)
+```
+
+Comparison between the categorized country and the years worked.
+
+```{r}
+createTable(compareGroups(Country.categorized~Years.worked.in.sports.statistics.in.academia, data = bd, chisq.test.perm = F))
+createTable(compareGroups(Country.categorized~Years.worked.in.sports.statistics.in.academia, data = bd, chisq.test.perm = F), show.p.mul=TRUE)
+```
+
+Comparison between the education level and the years worked.
+
+```{r}
+createTable(compareGroups(Years.worked.in.sports.statistics.in.academia~Highest.level.of.education, data = bd, chisq.test.perm = F))
+createTable(compareGroups(Years.worked.in.sports.statistics.in.academia~Highest.level.of.education, data = bd, chisq.test.perm = F), show.p.mul=TRUE)
+```
+
+*Correlation analysis of the numerical variables*
+
+```{r}
+var_num <- bd[9:14]
+noms <- c("Total citations","Total citations since 2018","Total citations H-index","Total citations H-index since 2018","Article with most citations", "Number of sports studied")
+colnames(var_num) <- noms
+```
+
+We create the correlation matrix.
+
+```{r}
+noms <- c("Var1","Var2","Var3","Var4","Var5","Var6")
+colnames(var_num) <- noms
+plot_correlation(var_num, title = "Correlation matrix among the numerical variables")
+```
+
+We perform a Principal Component Analysis (PCA).
+
+We visualize the inertia of each component graphically.
+
+```{r}
+res.pca <- PCA(var_num, graph = FALSE)
+fviz_eig(res.pca, addlabels = TRUE, main = "Graph of variances by each component", xlab = "Components", ylab = "Percentage of explained variance")
+```
+
+Now let's look at the exact values of each component.
+
+```{r}
+res.pca$eig
+```
+
+And finally, we create the PCA plot.
+
+```{r}
+fviz_pca_var(res.pca, col.var = "cos2",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"), 
+             repel = TRUE, xlab = "Component 1 (68.83%)", ylab = "Component 2 (15,14%)")
+```
+
+Now we remove the three outlier observations and we perform a Principal Component Analysis (PCA) again.
+
+```{r}
+bd <- bd[-28,]
+bd <- bd[-34,]
+bd <- bd[-69,]
+```
+
+```{r}
+res.pca <- PCA(var_num, graph = FALSE)
+fviz_eig(res.pca, addlabels = TRUE, main = "Graph of variances by each component", xlab = "Components", ylab = "Percentage of explained variance")
+```
+
+```{r}
+res.pca$eig
+```
